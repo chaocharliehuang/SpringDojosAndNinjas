@@ -2,6 +2,7 @@ package com.chaocharliehuang.dojosandninjas.controllers;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -72,5 +73,14 @@ public class DojosAndNinjas {
 		model.addAttribute("dojo", dojo);
 		model.addAttribute("ninjas", ninjaService.getNinjasAtDojo(dojo));
 		return "dojo.jsp";
+	}
+	
+	@GetMapping("pages/{pageNumber}")
+	public String getDojosPerPage(Model model, @PathVariable("pageNumber") int pageNumber) {
+		Page<Ninja> ninjas = ninjaService.ninjasPerPage(pageNumber - 1);
+		int totalPages = ninjas.getTotalPages();
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("ninjas", ninjas);
+		return "alldojos.jsp";
 	}
 }
